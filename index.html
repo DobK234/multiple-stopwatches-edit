@@ -4,6 +4,7 @@
 	<title>Multiple Stopwatches</title>
 	<link href="./reset.css" type="text/css" rel="stylesheet" media="all">
 	<link href="./multiple-stopwatches_style.css" type="text/css" rel="stylesheet" media="all">
+	<link rel="icon" href="stopwatch.ico" type="image/x-icon"/>
 </head>
 <body>
 	<div id="toolbar">
@@ -32,9 +33,24 @@
 				<div class="stopwatch">
 					<input class="name" type="text" value="Stopwatch 1" tabindex="1">
 					<button class="remove" tabindex="-1">&#10005</button>
-					<div class="time"><button tabindex="-1">0.00</button></div>
+					<div class="time"><button tabindex="-1">00:00:00</button></div>
 					<button class="clear" tabindex="-1">Clear</button>
 					<div class="keybind"><span>Keybind: </span><input type="text" maxlength="1" tabindex="2"></div>
+				</div>
+			</div>
+			<div class="stopwatch-divider" id="0">
+				<div class="divider" id="final-divider"></div>
+				<div class="stopwatch" id="final-stopwatch">
+					<div>drag here to move to end</div>
+				</div>
+			</div>
+		</div>
+		<div id="all-stopwatches-2">
+			<div class="stopwatch-divider-2" id="template-2" draggable="true">
+				<div class="divider"></div>
+				<div class="total-tracker" id="total">
+					<div style="text-align: center; margin: auto; padding-top: 5px; font-weight: bold; font-size: 30px;">Time Tracker</div>
+					<div class="time-2"><button id="time-track-btn" style="background-color: #aacbfa;" tabindex="-1">00:00:00</button></div>
 				</div>
 			</div>
 			<div class="stopwatch-divider" id="0">
