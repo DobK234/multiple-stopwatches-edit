@@ -63,7 +63,7 @@ h1 {
 .stopwatch-divider {
 	display: inline-block;
 	width: 272px;
-	height: 200px;
+	height: 400px;
 	padding: 10px 10px 10px 0;
 	vertical-align: top;
 }
@@ -74,6 +74,24 @@ h1 {
 	height: 200px;
 	padding: 10px 10px 10px 0;
 	vertical-align: top;
+}
+
+.date-tracker {
+	width: 250px;
+	height: 200px;
+	background-color: cornsilk;
+	margin-left:10px;
+	margin-top: 5px;
+	text-align: center;
+	overflow-y:scroll;
+}
+
+.date-tracker-row {
+	height: 40px;
+	line-height: 40px;
+	margin: 5px;
+	text-align: center;
+	font-size: 22px;
 }
 
 .stopwatch {

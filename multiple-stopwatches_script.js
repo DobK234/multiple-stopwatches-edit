@@ -69,14 +69,15 @@ deleteMacroBtn.addEventListener('click', e => {
 
 addDragEvents(finalBlock);
 stopwatchArray.push({id: "0", dropCount: 0});
-addBreakStopwatch();
+addStopwatch(null,true)
 addStopwatch();
 
 setInterval(updateStopwatches, 10);
 
-function addStopwatch() {
+function addStopwatch(pointerEvent,isBreak) {
 	let newStopwatch = template.cloneNode(true);
 	newStopwatch.id = numIds.toString();
+	
 
 	let newKeybind = newStopwatch.querySelector('.keybind input');
 	newKeybind.addEventListener('change', keybindChangeEvent);
@@ -88,7 +89,13 @@ function addStopwatch() {
 	newTimeButton.addEventListener('click', clickTimeButtonEvent);
 
 	let newName = newStopwatch.querySelector('.name');
-	newName.value = 'Stopwatch ' + (numIds-1);
+	if (isBreak === undefined) {
+		newName.value = 'Stopwatch ' + (numIds-1);
+	} else {
+		newTimeButton.id = "Breaks";
+		newName.value = 'Breaks';
+	}
+	
 	newName.addEventListener('change', nameChangeEvent);
 	newName.addEventListener('focus', e => disableDrag(newStopwatch));
 	newName.addEventListener('focusout', e => enableDrag(newStopwatch));
@@ -100,6 +107,8 @@ function addStopwatch() {
 	newClearButton.addEventListener('click', e => clear(e.target.parentNode));
 
 	addDragEvents(newStopwatch);
+	
+	let children = newStopwatch.children;
 
 	let newStopwatchObj = {id: numIds.toString(),
 						name: newName.value,
@@ -109,49 +118,8 @@ function addStopwatch() {
 						prevTime: 0,
 						startTime: 0,
 						dropCount: 0,
-						};
-	stopwatchArray.push(newStopwatchObj);
-	allStopwatches.insertBefore(newStopwatch, finalBlock);
-	numIds++;
-	numStopwatches++;
-}
-
-function addBreakStopwatch() {
-	let newStopwatch = template.cloneNode(true);
-	newStopwatch.id = numIds.toString();
-
-	let newKeybind = newStopwatch.querySelector('.keybind input');
-	newKeybind.addEventListener('change', keybindChangeEvent);
-	newKeybind.addEventListener('focus', saveOldKeybind)
-	newKeybind.addEventListener('focus', () => disableDrag(newStopwatch));
-	newKeybind.addEventListener('focusout', () => enableDrag(newStopwatch));
-
-	let newTimeButton = newStopwatch.querySelector('.time button');
-	newTimeButton.addEventListener('click', clickTimeButtonEvent);
-	newTimeButton.id = "Breaks";
-
-	let newName = newStopwatch.querySelector('.name');
-	newName.value = 'Breaks';
-	newName.addEventListener('change', nameChangeEvent);
-	newName.addEventListener('focus', e => disableDrag(newStopwatch));
-	newName.addEventListener('focusout', e => enableDrag(newStopwatch));
-
-	let newDelButton = newStopwatch.querySelector('.remove');
-	newDelButton.addEventListener('click', removeStopwatchUsingEvent);
-
-	let newClearButton = newStopwatch.querySelector('.clear');
-	newClearButton.addEventListener('click', e => clear(e.target.parentNode));
-
-	addDragEvents(newStopwatch);
-
-	let newStopwatchObj = {id: numIds.toString(),
-						name: newName.value,
-						stopwatch: newStopwatch,
-						keybind: numIds <= 10 ? (numIds % 10).toString() : '',
-						timeButton: newTimeButton,
-						prevTime: 0,
-						startTime: 0,
-						dropCount: 0,
+						dateTracker: children[2],
+						currentDate: 0,
 						};
 	stopwatchArray.push(newStopwatchObj);
 	allStopwatches.insertBefore(newStopwatch, finalBlock);
@@ -281,6 +249,18 @@ function clickTimeButtonEvent(e) {
 	if (stopwatchObj) {
 		stopwatchObj.startTime = new Date();
 		stopwatchObj.prevTime = timeToSeconds(stopwatchObj.timeButton.textContent)+".00";
+		let currentTimeString = stopwatchObj.startTime.toString().split(" ")[4];
+		let isOn = e.target.classList.contains("going"); // true when just turned on, false when just turned off
+		if (isOn) {
+			let newDiv = document.createElement('div');
+			newDiv.className = 'date-tracker-row';
+			newDiv.textContent = currentTimeString + " - ";
+			stopwatchObj.dateTracker.appendChild(newDiv);
+		} else {
+			let child = stopwatchObj.dateTracker.children[stopwatchObj.currentDate];
+			child.textContent = child.textContent + currentTimeString;
+			stopwatchObj.currentDate++;
+		}
 	}
 }
 
